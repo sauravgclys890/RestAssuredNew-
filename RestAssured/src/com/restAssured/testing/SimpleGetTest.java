@@ -4,37 +4,21 @@ package com.restAssured.testing;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
-
 import org.json.JSONObject;
 import org.testng.Assert;
-import org.testng.ITestResult;
 import org.testng.Reporter;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.AfterTest;
-import org.testng.annotations.BeforeTest;
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import org.testng.asserts.SoftAssert;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.markuputils.ExtentColor;
-import com.aventstack.extentreports.markuputils.MarkupHelper;
-import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
-import com.aventstack.extentreports.reporter.configuration.Theme;
 import com.restapi.JavaBean.Employee;
 import com.restapi.genricLib.BaseClass;
 import com.restapi.genricLib.FileLib;
+import com.restapi.genricLib.Saurav;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
@@ -56,7 +40,7 @@ public class SimpleGetTest extends BaseClass{
 	
 	FileLib flib= new FileLib();
 	
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testSimpleGetRestAPI() {
 		
 		extent.createTest("Simple GET Rest API");
@@ -91,7 +75,7 @@ public class SimpleGetTest extends BaseClass{
 	}
 	
 	
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testSplunkAPI() throws Exception{
 		
 		RestAssured.baseURI="https://splunk-ss-b.t-mobile.com:8089/services/search/jobs/export?";
@@ -106,7 +90,7 @@ public class SimpleGetTest extends BaseClass{
         
 	}
 	
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void getWheatherInfo() throws Exception {
 		
 		extent.createTest("Test Get API with param");
@@ -146,14 +130,16 @@ public class SimpleGetTest extends BaseClass{
 		
 	}
 	
-	@Test(enabled = false)
-	public void getWheatherInfoOfBangaloreWithValidData() {
+	@Test(enabled = true)
+	public void getWheatherInfoOfBangaloreWithValidData() throws Exception {
 		
 		extent.createTest("Test Get API with Valid data");
 		
 		RestAssured.baseURI="http://api.openweathermap.org/data/2.5/weather";
 		
-		String response=RestAssured.given().param("q", "Bangalore").param("appid", "17e5c69afcef0f16365a6c3b0cba4400")
+		FileLib flib= new FileLib();
+		
+		String response=RestAssured.given().param("q", flib.getExcelTestData("RestAPI", 0, 0)).param("appid", flib.getExcelTestData("RestAPI", 0, 1))
 		.when().get().then().extract().asString();
 		
 		System.out.println("Response is :- " + response);
@@ -176,7 +162,7 @@ public class SimpleGetTest extends BaseClass{
 	    
 	}
 	
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void getWheatherInfoBangaloreWithInvalidData() {
 		
 		extent.createTest("Test Get API with InValid data");
@@ -199,7 +185,7 @@ public class SimpleGetTest extends BaseClass{
 		 
 	}
 	
-	@Test(enabled = false)
+	@Test(enabled = true)
     public void PostRequestTestUsingString() {
 		
 		extent.createTest("Test Post API with Payload");
@@ -232,7 +218,7 @@ public class SimpleGetTest extends BaseClass{
     
     }
 	
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void PostRequestTestUsingJSON(){
 		
 		extent.createTest("Test Post API with JASONObject");
@@ -262,7 +248,7 @@ public class SimpleGetTest extends BaseClass{
 	
 	}
 	
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void PostRequestTestUsingJSONwithLog(){
 		
 		extent.createTest("Test POst API with Log");
@@ -290,12 +276,12 @@ public class SimpleGetTest extends BaseClass{
        
 	}
 	
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void PostRequestTestUsingBufferReader() throws Exception{
 		
 		extent.createTest("Test POst API with BufferReader");
 		
-		RestAssured.baseURI = "http://dummy.restapiexample.com/api/v1";
+		RestAssured.baseURI = Saurav.BASEURI_DUMMYURL;
 		
 		String fileName=System.getProperty("user.dir")+File.separator+"RestRequest"+File.separator+"Request.json";
 		
@@ -328,7 +314,7 @@ public class SimpleGetTest extends BaseClass{
 	}
 	
 	
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void PostRequestTestUsingPOJO(){
 		
 		extent.createTest("Test POst API with Pogo");
@@ -362,7 +348,7 @@ public class SimpleGetTest extends BaseClass{
 		
 	}
 	
-	@Test(enabled = false)
+	@Test(enabled = true)
 	public void testSOAPService() throws Exception{
 		
 		extent.createTest("Test SOAP Service");
@@ -386,8 +372,76 @@ public class SimpleGetTest extends BaseClass{
         String rate=jsXpath.getString("GetConversionRateResult");
         System.out.println("rate returned is: " +  rate);
 
-		
 
+	}
+	
+	@Test(enabled = true)
+	public void createShoppingCart() {
+		
+		Header h1= new Header("Accept", "*/*");
+	    Header h2 = new Header("Accept-Language", "gzip, deflate");
+	    Header h3 = new Header("Cache-Control", "no-cache");
+	    Header h4 = new Header("Content-Length", "2");
+	    Header h5 = new Header("Content-Type", "application/json");
+	    Header h6 = new Header("Cookie", "JSESSIONID=F5FAE4A0852A220029942DE61705DD0F");
+	    Header h7 = new Header("EligibilityParams", "distributionChannelId=\"9144413504413358531\",marketId=\"22222\",customerCategoryId=\"9134661890013196039\"");
+	    Header h8 = new Header("Host", "telus1216:8910");
+	   
+	    
+	    List<Header> list = new ArrayList<Header>();
+	    list.add(h1);
+	    list.add(h2);
+	    list.add(h3);
+	    list.add(h4);
+	    list.add(h5);
+	    list.add(h6);
+	    list.add(h7);
+	    list.add(h8);
+	    
+	    Headers header = new Headers(list);
+	    
+		RestAssured.baseURI="http://telus1216:8910/api/v1/shoppingCart?";
+		ValidatableResponse res=RestAssured.given().headers(header).param("catalogItemIds", "9142278346813160836").param("externalAddressId", "9156240824613805290").when().post().then();
+		
+		int status= res.extract().statusCode();
+				
+				System.out.println(status);
+	
+	}
+	
+	@Test(enabled= true)
+	public void testAPI() throws Exception {
+		
+		logger=extent.createTest("Rest API Testing using rest Assured");
+		
+		FileLib flib= new FileLib();
+		
+        RestAssured.baseURI="http://api.openweathermap.org/data/2.5/weather";
+		
+		ValidatableResponse res=RestAssured.given().param("q", "Bangalore").param("appid", "17e5c69afcef0f16365a6c3b0cba4400")
+		.when().get().then();
+		
+	    res.statusCode(200);
+	    
+	    logger.log(Status.PASS, "Status code successfully verified");
+	    
+	    System.out.println(res.extract().asString());
+	    
+	    System.out.println(res.extract().statusCode());
+	    Reporter.log("Verified Success code Successfully", true);
+	    
+	    res.contentType(ContentType.JSON);
+	    
+	    String countryName=res.extract().response().path("sys.country");
+	    Reporter.log("Country name is verified= "+countryName, true);
+	    
+	    JsonPath path= new JsonPath(res.extract().asString());
+	    System.out.println("Country Name= "+path.get("sys.country"));
+	    
+	    String name= res.extract().response().path("name");
+	    System.out.println(name);
+	    
+	    logger.log(Status.INFO, "name is ="+ name, MediaEntityBuilder.createScreenCaptureFromPath("screen.png").build());
 	}
 	
 	
